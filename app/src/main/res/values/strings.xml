@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Drug db</string>
+    <string name="drug_id">Drug ID</string>
+    <string name="drug_name">Drug name</string>
+    <string name="drug_a_Ing">Active ing</string>
+    <string name="drug_category">Category</string>
+    <string name="drug_price">Price</string>
+    <string name="insert">Insert</string>
+    <string name="update">Update</string>
+    <string name="delete">Delete</string>
+    <string name="delete_All">Delete All</string>
+    <string name="Clear">Clear</string>
+    <string name="seach">Search</string>
+</resources>
