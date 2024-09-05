@@ -57,11 +57,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.btClear.setOnClickListener {
 
-            binding.EDDrugName.text = null
-            binding.EDDrugAIng.text = null
-            binding.SpDrugCategory.setSelection(0)
-            binding.EDDrugPrice.text = null
-
+            clear()
         }
 
         binding.btInsert.setOnClickListener{
@@ -107,6 +103,7 @@ class MainActivity : AppCompatActivity() {
             drugArrayList = sql.readData()
             binding.EDId.setText((drugArrayList.size+1).toString())
             loadRV(drugArrayList)
+            clear()
 
         }
 
@@ -133,6 +130,7 @@ class MainActivity : AppCompatActivity() {
             builder.setMessage("Are you sure? All Database will be Deleted permanently").setPositiveButton("Yes", dialogClickListener)
                 .setNegativeButton("No", dialogClickListener).show()
 
+            clear()
         }
 
         binding.EDDrugName.addTextChangedListener(object : TextWatcher {
@@ -146,6 +144,7 @@ class MainActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val drugList = sql.search(s)
                 loadRV(drugList)
+           //     binding.EDId.setText((drugArrayList.size+1).toString())
 
             }
         })
@@ -235,6 +234,16 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun clear (){
+        binding.EDDrugName.text = null
+        binding.EDDrugAIng.text = null
+        binding.SpDrugCategory.setSelection(0)
+        binding.EDDrugPrice.text = null
+        binding.EDId.setText((drugArrayList.size+1).toString())
 
     }
 
