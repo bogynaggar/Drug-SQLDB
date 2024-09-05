@@ -49,6 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
+        android:hint="@string/hint"
         app:layout_constraintStart_toEndOf="@id/TV_drug_A_ing"
         app:layout_constraintTop_toBottomOf="@id/ED_id"
         app:layout_constraintEnd_toEndOf="parent"
@@ -170,19 +171,11 @@
         >
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/bt_search"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="@android:color/holo_blue_light"
-            android:text="@string/seach"
-            android:textColor="@color/design_default_color_error" />
-
-        <com.google.android.material.button.MaterialButton
             android:id="@+id/bt_delete"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_margin="5dp"
             android:backgroundTint="@android:color/holo_blue_light"
             android:text="@string/delete"
             android:textColor="@color/design_default_color_error" />
@@ -192,7 +185,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="9sp"
+            android:layout_margin="5dp"
             android:backgroundTint="@android:color/holo_blue_light"
             android:text="@string/delete_All"
             android:textColor="@color/design_default_color_error" />

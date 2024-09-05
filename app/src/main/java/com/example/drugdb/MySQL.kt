@@ -163,6 +163,30 @@ class MySQL(private var context: Context ) : SQLiteOpenHelper(context , DATABASE
         }*/
     }
 
+    @SuppressLint("Range")
+    fun search(s:CharSequence?) : MutableList<Drug>{
+        val list : MutableList<Drug> = ArrayList()
+
+        val db = this.readableDatabase
+        val query = "Select * from $TABLE_NAME WHERE $COL_NAME LIKE '%$s%' "
+        val result = db.rawQuery(query,null)
+        if(result.moveToFirst()){
+            do {
+                val drug = Drug(
+                    result.getString(result.getColumnIndex(COL_ID)).toInt() ,
+                    result.getString(result.getColumnIndex(COL_NAME)) ,
+                    result.getString(result.getColumnIndex(COL_AI)) ,
+                    result.getString(result.getColumnIndex(COL_CAT)) ,
+                    result.getString(result.getColumnIndex(COL_PRICE))
+                )
+                list.add(drug)
+            }while (result.moveToNext())
+        }
+        result.close()
+        db.close()
+        return list
+    }
+
     }
 
 

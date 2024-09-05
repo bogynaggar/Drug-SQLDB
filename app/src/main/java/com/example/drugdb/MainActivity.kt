@@ -6,12 +6,15 @@ import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.drugdb.databinding.ActivityMainBinding
 
@@ -19,7 +22,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     lateinit var  selectedCategory :String
-    var isDrugCatSelected = false
+    // var isDrugCatSelected = false
     val defaultTextForSpinner = "Please Select"
     var drugCat : MutableList<String> =  ArrayList()
     var drugArrayList: MutableList<Drug> = ArrayList<Drug>()
@@ -32,7 +35,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        ////////// initialize values first time  ///////////////////
+        ///////////// initialize values first time  ///////////////////
+
         setInitialValues()
 
         /////////////  SQL //////////
@@ -42,7 +46,7 @@ class MainActivity : AppCompatActivity() {
 
         ////////////  Recycle View /////////////
 
-        loadRV()
+        loadRV(drugArrayList)
         binding.EDId.setText((drugArrayList.size+1).toString())
 
         ////////////  Spinner /////////////
@@ -75,7 +79,7 @@ class MainActivity : AppCompatActivity() {
                 sql.insertData(drug)
             }
             drugArrayList = sql.readData()
-            loadRV()
+            loadRV(drugArrayList)
         }
 
         binding.btUpdate.setOnClickListener {
@@ -93,11 +97,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this , "FAILED to Update" ,Toast.LENGTH_SHORT).show()
             }
             drugArrayList = sql.readData()
-            loadRV()
-
-        }
-
-        binding.btSearch.setOnClickListener {
+            loadRV(drugArrayList)
 
         }
 
@@ -106,8 +106,7 @@ class MainActivity : AppCompatActivity() {
             sql.deleteSelected(id)
             drugArrayList = sql.readData()
             binding.EDId.setText((drugArrayList.size+1).toString())
-            loadRV()
-
+            loadRV(drugArrayList)
 
         }
 
@@ -120,7 +119,7 @@ class MainActivity : AppCompatActivity() {
                             sql.deleteALLData()
                             drugArrayList = sql.readData()
                             binding.EDId.setText((drugArrayList.size+1).toString())
-                            loadRV()
+                            loadRV(drugArrayList)
                             Toast.makeText(this, "All Database deleted Successfully", Toast.LENGTH_SHORT).show()
                         }
 
@@ -136,14 +135,29 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+        binding.EDDrugName.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                loadRV(drugArrayList)
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val drugList = sql.search(s)
+                loadRV(drugList)
+
+            }
+        })
+
 
     }
 
 
-    private fun loadRV (){
+    private fun loadRV (drugList: MutableList<Drug> ){
 
         val itemRV  = binding.RV
-        val itemAdapter = RVAdapter( drugArrayList)
+        val itemAdapter = RVAdapter( drugList)
         itemRV.layoutManager = LinearLayoutManager(this)
         itemRV.adapter = itemAdapter
         itemRV.setHasFixedSize(true)
@@ -155,7 +169,7 @@ class MainActivity : AppCompatActivity() {
                 binding.EDDrugAIng.setText(model.activeI)
 
                 val selector = drugCat.indexOf(model.category)
-                Toast.makeText(this@MainActivity, "Selected item is " + model.category, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, "Selected Category is " + model.category, Toast.LENGTH_SHORT).show()
                 binding.SpDrugCategory.setSelection(selector)
                 selectedCategory = drugCat[selector]
 
@@ -177,12 +191,12 @@ class MainActivity : AppCompatActivity() {
 
                 if (parent.id == spinner.id ){
                     if (spinner.selectedItem.toString() == defaultTextForSpinner){
-                        isDrugCatSelected = false
+                        //   isDrugCatSelected = false
                         //   Toast.makeText(this@MainActivity, "Selected item "  + "is " + drugCat[position], Toast.LENGTH_SHORT).show()
 
                     }else{
                         selectedCategory = drugCat[position]
-                        isDrugCatSelected = true
+                       //   isDrugCatSelected = true
                         Toast.makeText(this@MainActivity, "Selected Category "  + "is " + drugCat[position], Toast.LENGTH_SHORT).show()
                     }
                 }
@@ -192,7 +206,6 @@ class MainActivity : AppCompatActivity() {
                 // write code to perform some action
             } }
     }
-
 
     private fun setInitialValues () {
         val sharedPref :SharedPreferences  = getSharedPreferences("Settings" ,MODE_PRIVATE )
