@@ -101,9 +101,11 @@ class MainActivity : AppCompatActivity() {
             val id =  binding.EDId.text.toString().toInt()
             sql.deleteSelected(id)
             drugArrayList = sql.readData()
-            binding.EDId.setText((drugArrayList.size+1).toString())
             loadRV(drugArrayList)
             clear()
+            val lastID = drugArrayList[drugArrayList.size-1].id+1
+            binding.EDId.setText((lastID).toString())
+
 
         }
 
@@ -221,7 +223,7 @@ class MainActivity : AppCompatActivity() {
             drugArrayList.add(Drug(2, "Cetal 500 mg 20tab" , "Paracetamol" , "AntiInflammatory" , "24.0"))
             drugArrayList.add(Drug(3, "Concor 5 mg 30 F.C tab" , "Bisoprolol" , "AntiHyperTension" , "72.0"))
             drugArrayList.add(Drug(4, "Edemex 1mg 20 tab" , "Bumetanide" , "Diuretic" , "18.0"))
-            drugArrayList.add(Drug(5, "Cataflam 50 mg 20 tab" , "Diclofenac Potassium" , "Antibiotic" , "68.0"))
+            drugArrayList.add(Drug(5, "Cataflam 50 mg 20 tab" , "Diclofenac Potassium" , "AntiInflammatory" , "68.0"))
             drugArrayList.add(Drug(6, "Tavanic 500mg 5 tab" , "Levofloxacin" , "Antibiotic" , "134.0"))
             drugArrayList.add(Drug(7, "Augmentin 1gm 14 tab" , "Amoxicillin + claulonic acid" , "Antibiotic" , "131.0"))
 
