@@ -22,11 +22,12 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     lateinit var  selectedCategory :String
-    // var isDrugCatSelected = false
+    var isDrugCatSelected = false
     val defaultTextForSpinner = "Please Select"
     var drugCat : MutableList<String> =  ArrayList()
     var drugArrayList: MutableList<Drug> = ArrayList<Drug>()
     val sql = MySQL(this)
+    var lastID = 0
 
 
     @SuppressLint("SetTextI18n")
@@ -47,7 +48,8 @@ class MainActivity : AppCompatActivity() {
         ////////////  Recycle View /////////////
 
         loadRV(drugArrayList)
-        binding.EDId.setText((drugArrayList.size+1).toString())
+        lastID = drugArrayList[drugArrayList.size-1].id+1
+        binding.EDId.setText((lastID).toString())
 
         ////////////  Spinner /////////////
 
@@ -56,21 +58,20 @@ class MainActivity : AppCompatActivity() {
         ////////////  Buttons //////////////
 
         binding.btClear.setOnClickListener {
-
             clear()
         }
 
         binding.btInsert.setOnClickListener{
 
-            val id = drugArrayList.size + 1
+            val id = drugArrayList[drugArrayList.size-1].id + 1
             val name = binding.EDDrugName.text
-            val aI = binding.EDDrugAIng.text.toString()
-            val cat = binding.SpDrugCategory.selectedItem.toString()
-            val price = binding.EDDrugPrice.text.toString()
+            val aI = binding.EDDrugAIng.text
+            val cat = binding.SpDrugCategory.selectedItem
+            val price = binding.EDDrugPrice.text
 
-            val drug = Drug(id , name.toString(), aI , cat , price)
-            if (name.isEmpty()){
-                Toast.makeText(this , "FAILED As empty Fields" ,Toast.LENGTH_SHORT).show()
+            val drug = Drug(id , name.toString(), aI.toString(), cat.toString(), price.toString())
+            if (name.isEmpty() || aI.isEmpty() || price.isEmpty() || !isDrugCatSelected) {
+                Toast.makeText(this , "FAILED As empty fields or category not selected " ,Toast.LENGTH_SHORT).show()
             }else {
                 sql.insertData(drug)
             }
@@ -190,12 +191,12 @@ class MainActivity : AppCompatActivity() {
 
                 if (parent.id == spinner.id ){
                     if (spinner.selectedItem.toString() == defaultTextForSpinner){
-                        //   isDrugCatSelected = false
+                         isDrugCatSelected = false
                         //   Toast.makeText(this@MainActivity, "Selected item "  + "is " + drugCat[position], Toast.LENGTH_SHORT).show()
 
                     }else{
                         selectedCategory = drugCat[position]
-                       //   isDrugCatSelected = true
+                        isDrugCatSelected = true
                         Toast.makeText(this@MainActivity, "Selected Category "  + "is " + drugCat[position], Toast.LENGTH_SHORT).show()
                     }
                 }
@@ -243,7 +244,7 @@ class MainActivity : AppCompatActivity() {
         binding.EDDrugAIng.text = null
         binding.SpDrugCategory.setSelection(0)
         binding.EDDrugPrice.text = null
-        val lastID = drugArrayList[drugArrayList.size-1].id+1
+        lastID = drugArrayList[drugArrayList.size-1].id+1
         binding.EDId.setText((lastID).toString())
 
 
