@@ -103,8 +103,6 @@ class MainActivity : AppCompatActivity() {
             drugArrayList = sql.readData()
             loadRV(drugArrayList)
             clear()
-            val lastID = drugArrayList[drugArrayList.size-1].id+1
-            binding.EDId.setText((lastID).toString())
 
 
         }
@@ -245,7 +243,9 @@ class MainActivity : AppCompatActivity() {
         binding.EDDrugAIng.text = null
         binding.SpDrugCategory.setSelection(0)
         binding.EDDrugPrice.text = null
-        binding.EDId.setText((drugArrayList.size+1).toString())
+        val lastID = drugArrayList[drugArrayList.size-1].id+1
+        binding.EDId.setText((lastID).toString())
+
 
     }
 
